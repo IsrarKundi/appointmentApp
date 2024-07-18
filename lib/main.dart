@@ -1,3 +1,4 @@
+import 'package:appointment/screens/book_appointment.dart';
 import 'package:appointment/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      home: HomeScreen(), 
     );
   }
 }
