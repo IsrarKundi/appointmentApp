@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// file for different custom widgets for reuse
+
 Widget FormFields(String label, IconData icon){
   return SizedBox(
     height: 60,
