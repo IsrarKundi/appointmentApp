@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/appointments.dart';
+import 'package:appointment/components/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -128,6 +129,7 @@ class HomeScreen extends StatelessWidget {
                     },
                   ),
                 ),
+                lowerSection()
               ],
             ),
           ),

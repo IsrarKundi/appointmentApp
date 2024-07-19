@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:appointment/components/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -73,15 +73,4 @@ class BookAppointment extends StatelessWidget {
   }
 }
 
-Widget FormFields(String label, IconData icon){
-  return SizedBox(
-    height: 60,
-    child: TextField(
-        decoration: InputDecoration(
-          hintText: label,
-          suffixIcon: Icon(icon),
-          border: OutlineInputBorder(),
-        )
-    ),
-  );
-}
+
