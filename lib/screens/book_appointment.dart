@@ -33,13 +33,21 @@ class BookAppointment extends StatelessWidget {
               ),
               ),
               SizedBox(height: 25,),
-              SizedBox(
-                height: 60,
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white
+                ),
+                height: 55,
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Name',
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black87,
+                      fontSize: 16
+                    ),
                     prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder()
+                    border: OutlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.black54))
                   )
                 ),
               ),

@@ -2,15 +2,30 @@ import 'package:flutter/material.dart';
 
 // file for different custom widgets for reuse
 
-Widget FormFields(String label, IconData icon){
+Widget FormFields(String label, IconData icon) {
   return SizedBox(
-    height: 60,
-    child: TextField(
-        decoration: InputDecoration(
-          hintText: label,
-          suffixIcon: Icon(icon),
-          border: OutlineInputBorder(),
-        )
+    height: 62,
+    child: Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.black.withOpacity(1), width: 0.6),
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Colors.black87
+            ),),
+            Icon(icon),
+          ],
+        ),
+      ),
+      color: Colors.white,
     ),
   );
 }
