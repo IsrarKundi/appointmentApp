@@ -94,3 +94,30 @@ Widget lowerSection(){
     ),
   );
 }
+
+
+class UnderlinedTextButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onTap;
+
+  UnderlinedTextButton({required this.text, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.orange,
+          decoration: TextDecoration.underline,
+          decorationColor: Colors.orange,
+          fontSize: 18,
+          decorationThickness: 2,
+          fontWeight: FontWeight.bold
+
+        ),
+      ),
+    );
+  }
+}
