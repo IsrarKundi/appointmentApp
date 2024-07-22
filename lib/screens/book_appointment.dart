@@ -1,10 +1,14 @@
 import 'dart:ui';
 import 'package:appointment/components/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:intl/intl.dart';
+
+final _fireStore = FirebaseFirestore.instance;
+
 
 class BookAppointment extends StatefulWidget {
   const BookAppointment({super.key});
@@ -16,6 +20,8 @@ class BookAppointment extends StatefulWidget {
 class _BookAppointmentState extends State<BookAppointment> {
   DateTime? _selectedDateTime;
   String? _selectedService;
+  String? _customerName;
+  final myController = TextEditingController();
 
 
   final List<String> _services = ['Haircut', 'Manicure', 'Massage', 'Pedicure'];
@@ -51,7 +57,8 @@ class _BookAppointmentState extends State<BookAppointment> {
                     color: Colors.white
                 ),
                 height: 55,
-                child: const TextField(
+                child: TextField(
+                  controller: myController,
                     decoration: InputDecoration(
                         hintText: 'Name',
                         hintStyle: TextStyle(
@@ -173,9 +180,24 @@ class _BookAppointmentState extends State<BookAppointment> {
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
                       ),
                       onPressed: () {
+                        setState(() {
+                          if(myController != null){
+                            _customerName = myController.text;
+                          }
+                        });
+                        print(_customerName);
+                        print(_selectedService);
+                        print(_selectedDateTime);
                         // Add booking logic here
+
+                        myController.clear();
+                        _fireStore.collection('appointments').add({
+                          'name': _customerName,
+                          'service': _selectedService,
+                          'time': _selectedDateTime,
+                        });
                       },
-                      child: const Text(
+                      child: Text(
                         'Book',
                         style: TextStyle(
                           color: Colors.white,
