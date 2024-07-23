@@ -80,52 +80,7 @@ class HomeScreen extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: 5,
                     itemBuilder: (context, index) {
-                      return Card(
-                        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  appointments[index].name,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                              SizedBox(width: 6),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  appointments[index].date,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  appointments[index].time,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return CustomerCard(appointments[index]);
                     },
                   ),
                 ),
@@ -134,6 +89,62 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomerCard extends StatelessWidget {
+  final Appointment appointment;
+
+  CustomerCard(this.appointment);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text(
+                appointment.name,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+            SizedBox(width: 6),
+            Expanded(
+              flex: 2,
+              child: Text(
+                appointment.date,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              flex: 1,
+              child: Text(
+                appointment.time,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
