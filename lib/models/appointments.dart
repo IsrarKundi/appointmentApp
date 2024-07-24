@@ -1,8 +1,8 @@
 class Appointment{
   late String name;
-  late String date;
-  late String time;
+  late String service;
+  late DateTime time;
 
-  Appointment({required this.name, required this.date, required this.time});
+  Appointment({required this.name, required this.service, required this.time});
 
 }

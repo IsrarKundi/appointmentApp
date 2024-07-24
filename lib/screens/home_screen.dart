@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../models/appointments.dart';
 import 'package:appointment/components/widgets.dart';
+
+final _fireStore = FirebaseFirestore.instance;
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -19,30 +23,34 @@ class HomeScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(0),
-                    topLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(35),
-                    bottomLeft: Radius.circular(35)),
+                  topRight: Radius.circular(0),
+                  topLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(35),
+                  bottomLeft: Radius.circular(35),
+                ),
                 color: Colors.orange,
               ),
-
               child: Padding(
                 padding: const EdgeInsets.only(top: 70, left: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(Icons.arrow_back_ios),
-                    SizedBox(height: 40,),
+                    SizedBox(height: 40),
                     Text(
                       'Welcome Admin',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 2),
                     Text(
-                      'Here are your upcoming appointmnets',
+                      'Here are your upcoming appointments',
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 10),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
@@ -51,9 +59,7 @@ class HomeScreen extends StatelessWidget {
                           onPressed: () {},
                           child: Text(
                             'View All',
-                            style: TextStyle(
-                              color: Colors.orange
-                            ),
+                            style: TextStyle(color: Colors.orange),
                           ),
                         ),
                       ),
@@ -73,18 +79,13 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            top: screenHeight * 0.3,
+            top: screenHeight * 0.32,
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return CustomerCard(appointments[index]);
-                    },
-                  ),
+                  child: CustomerCardStream(),
                 ),
-                lowerSection()
+                lowerSection(),
               ],
             ),
           ),
@@ -94,10 +95,52 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class CustomerCard extends StatelessWidget {
-  final Appointment appointment;
+class CustomerCardStream extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: _fireStore.collection('appointments').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        final customers = snapshot.data?.docs;
+        List<CustomerCard> customerCards = [];
+        int count = 0;
+        for (var customer in customers!) {
+          if (count >= 5) break;  // Limit to 5 cards
+          final customerData = customer.data() as Map<String, dynamic>;
+          final customerName = customerData['name'];
+          final service = customerData['service'];
+          final timestamp = customerData['time'] as Timestamp;
+          final dateTime = timestamp.toDate();
 
-  CustomerCard(this.appointment);
+          final customerCard = CustomerCard(
+            name: customerName,
+            service: service,
+            time: dateTime,
+          );
+
+          customerCards.add(customerCard);
+          count++;
+        }
+        return ListView(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          children: customerCards,
+        );
+      },
+    );
+  }
+}
+
+class CustomerCard extends StatelessWidget {
+  final String name;
+  final String service;
+  final DateTime time;
+
+  CustomerCard({required this.name, required this.service, required this.time});
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +154,7 @@ class CustomerCard extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Text(
-                appointment.name,
+                name,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black54,
@@ -123,7 +166,7 @@ class CustomerCard extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Text(
-                appointment.date,
+                DateFormat('dd/MM/yyyy').format(time),
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black54,
@@ -135,7 +178,7 @@ class CustomerCard extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Text(
-                appointment.time,
+                DateFormat('HH:mm').format(time),
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black54,
@@ -150,10 +193,3 @@ class CustomerCard extends StatelessWidget {
   }
 }
 
-List<Appointment> appointments = [
-  Appointment(name: 'Israr', date: 'Today', time: '11:00'),
-  Appointment(name: 'Ali', date: 'Tomorrow', time: '9:00'),
-  Appointment(name: 'Ahmad', date: '25/7/24', time: '11:30'),
-  Appointment(name: 'Eesa', date: '25/7/24', time: '3:00'),
-  Appointment(name: 'Umer', date: '26/7/24', time: '9:00'),
-];
