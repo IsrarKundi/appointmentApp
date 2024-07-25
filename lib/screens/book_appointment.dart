@@ -30,11 +30,11 @@ class _BookAppointmentState extends State<BookAppointment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.arrow_back)
-          ],
+        title: Text(
+          'Book Appointment',
+          style: TextStyle(
+              fontSize: 24
+          ),
         ),
         backgroundColor: Colors.orange,
       ),
@@ -44,14 +44,8 @@ class _BookAppointmentState extends State<BookAppointment> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 15,),
-              Text(
-                'Book Appointment',
-                style: TextStyle(
-                    fontSize: 24
-                ),
-              ),
-              SizedBox(height: 25,),
+              SizedBox(height: 35,),
+
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white

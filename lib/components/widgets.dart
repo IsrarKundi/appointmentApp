@@ -42,7 +42,7 @@ Widget lowerSection(){
                 Container(
                   height: 30,
                   width: 30,
-                  color: Colors.blue,
+                  color: Color(0xff3B82F6),
                 ),
                 SizedBox(width: 10,),
                 Text('Haircut')
@@ -54,7 +54,7 @@ Widget lowerSection(){
                 Container(
                   height: 30,
                   width: 30,
-                  color: Colors.brown,
+                  color: Color(0xFFFB7185),
                 ),
                 SizedBox(width: 10,),
                 Text('Manicure')
@@ -70,7 +70,7 @@ Widget lowerSection(){
                 Container(
                   height: 30,
                   width: 30,
-                  color: Colors.yellow,
+                  color: Color(0xFF84CC16),
                 ),
                 SizedBox(width: 10,),
                 Text('Massage')
@@ -82,7 +82,7 @@ Widget lowerSection(){
                 Container(
                   height: 30,
                   width: 30,
-                  color: Colors.green,
+                  color: Color(0xFFD13FED),
                 ),
                 SizedBox(width: 10,),
                 Text('Pedicure')

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appointment/components/widgets.dart';
 import 'package:appointment/components/customercard_stream.dart';
@@ -31,7 +32,11 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.arrow_back_ios),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(context, 'book_appointment');
+                      },
+                        child: Icon(Icons.arrow_back_ios)),
                     SizedBox(height: 40),
                     Text(
                       'Welcome Admin',
@@ -52,7 +57,9 @@ class HomeScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 16),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, 'appointments_screen');
+                          },
                           child: Text(
                             'View All',
                             style: TextStyle(color: Colors.orange),

@@ -34,9 +34,12 @@ class CustomerCardStream extends StatelessWidget {
           customerCards.add(customerCard);
           count++;
         }
-        return ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          children: customerCards,
+        return Container(
+          height: 500,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            children: customerCards,
+          ),
         );
       },
     );
