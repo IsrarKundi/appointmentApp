@@ -207,6 +207,3 @@ class _BookAppointmentState extends State<BookAppointment> {
     );
   }
 }
-
-
-// random comment for commit
