@@ -16,7 +16,7 @@ class CustomerCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(1.0),
       ),
       child: Container(
-        height: 70,
+        height: 50,
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(

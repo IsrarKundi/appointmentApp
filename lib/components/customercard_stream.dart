@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'customer_card.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+
 class CustomerCardStream extends StatelessWidget {
+  final int displayMode; // 0 to display up to 5 cards, any other value to display all
+
+  CustomerCardStream({required this.displayMode});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -18,7 +23,7 @@ class CustomerCardStream extends StatelessWidget {
         List<CustomerCard> customerCards = [];
         int count = 0;
         for (var customer in customers!) {
-          if (count >= 5) break;  // Limit to 5 cards
+          if (displayMode == 0 && count >= 5) break;  // Limit to 5 cards if displayMode is 0
           final customerData = customer.data() as Map<String, dynamic>;
           final customerName = customerData['name'];
           final service = customerData['service'];
@@ -35,9 +40,9 @@ class CustomerCardStream extends StatelessWidget {
           count++;
         }
         return Container(
-          height: 500,
+          height: 560,
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             children: customerCards,
           ),
         );

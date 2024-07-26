@@ -72,6 +72,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
+
           Positioned(
             top: screenHeight * 0.4,
             left: 0,
@@ -85,8 +86,9 @@ class HomeScreen extends StatelessWidget {
             top: screenHeight * 0.32,
             child: Column(
               children: [
+                SizedBox(height: 20,),
                 Expanded(
-                  child: CustomerCardStream(),
+                  child: CustomerCardStream(displayMode: 0,),
                 ),
                 lowerSection(),
               ],
