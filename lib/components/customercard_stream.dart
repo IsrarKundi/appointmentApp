@@ -29,11 +29,13 @@ class CustomerCardStream extends StatelessWidget {
           final service = customerData['service'];
           final timestamp = customerData['time'] as Timestamp;
           final dateTime = timestamp.toDate();
+          final id = customer.id; // Get the document ID
 
           final customerCard = CustomerCard(
             name: customerName,
             service: service,
             time: dateTime,
+            id: id, // Pass the document ID
           );
 
           customerCards.add(customerCard);

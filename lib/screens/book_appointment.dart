@@ -190,6 +190,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                           'service': _selectedService,
                           'time': _selectedDateTime,
                         });
+                        Navigator.pushNamed(context, 'home_screen');
                       },
                       child: Text(
                         'Book',
