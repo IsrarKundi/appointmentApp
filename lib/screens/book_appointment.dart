@@ -7,18 +7,23 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/appointments_data.dart';
 
-class BookAppointment extends StatelessWidget {
+class BookAppointment extends StatefulWidget {
   BookAppointment({super.key});
 
+  @override
+  _BookAppointmentState createState() => _BookAppointmentState();
+}
+
+class _BookAppointmentState extends State<BookAppointment> {
   final TextEditingController myController = TextEditingController();
   final List<String> _services = ['Haircut', 'Manicure', 'Massage', 'Pedicure'];
 
+  DateTime? _selectedDateTime;
+  String? _selectedService;
+  String? _customerName;
+
   @override
   Widget build(BuildContext context) {
-    DateTime? _selectedDateTime;
-    String? _selectedService;
-    String? _customerName;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -82,27 +87,23 @@ class BookAppointment extends StatelessWidget {
                             color: Colors.black87,
                           ),
                         ),
-                        StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
-                            return DropdownButton<String>(
-                              value: _selectedService,
-                              items: _services.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(color: Colors.orange),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  _selectedService = newValue;
-                                });
-                              },
-                              underline: Container(),
+                        DropdownButton<String>(
+                          value: _selectedService,
+                          items: _services.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: TextStyle(color: Colors.orange),
+                              ),
                             );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedService = newValue;
+                            });
                           },
+                          underline: Container(),
                         ),
                       ],
                     ),
@@ -119,15 +120,11 @@ class BookAppointment extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return Text(
-                        _selectedDateTime != null
-                            ? DateFormat('dd/MM/yyyy').format(_selectedDateTime!)
-                            : 'Not selected',
-                        style: TextStyle(fontSize: 18),
-                      );
-                    },
+                  Text(
+                    _selectedDateTime != null
+                        ? DateFormat('dd/MM/yyyy').format(_selectedDateTime!)
+                        : 'Not selected',
+                    style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
@@ -141,15 +138,11 @@ class BookAppointment extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return Text(
-                        _selectedDateTime != null
-                            ? DateFormat('HH:mm').format(_selectedDateTime!)
-                            : 'Not selected',
-                        style: TextStyle(fontSize: 18),
-                      );
-                    },
+                  Text(
+                    _selectedDateTime != null
+                        ? DateFormat('HH:mm').format(_selectedDateTime!)
+                        : 'Not selected',
+                    style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
@@ -163,7 +156,9 @@ class BookAppointment extends StatelessWidget {
                       context: context,
                     );
                     if (dateTime != null) {
-                      _selectedDateTime = dateTime;
+                      setState(() {
+                        _selectedDateTime = dateTime;
+                      });
                     }
                   },
                 ),

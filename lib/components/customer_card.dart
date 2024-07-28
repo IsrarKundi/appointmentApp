@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../screens/editapoointment_screen.dart';
+import 'package:appointment/models/appointments_data.dart';
+import 'package:provider/provider.dart';
 
 class CustomerCard extends StatelessWidget {
   final String name;
@@ -20,7 +22,8 @@ class CustomerCard extends StatelessWidget {
       ),
       child: GestureDetector(
         onLongPress: (){
-          _deleteAppointment(context, id);
+          Provider.of<AppointmentData>(context, listen: false)
+              .deleteAppointment(id);
         },
         onDoubleTap: (){
           Navigator.push(
