@@ -7,6 +7,13 @@ class AppointmentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'book_appointment');
+        },
+        backgroundColor: Colors.orange,
+        child: const Icon(Icons.add, color: Colors.white,),
+      ),
       appBar: AppBar(
         title: Text(
           'Appointments',
@@ -21,7 +28,7 @@ class AppointmentsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 26, bottom: 16, left: 24, right: 24),
+                padding: const EdgeInsets.only(top: 26, bottom: 36, left: 24, right: 24),
                 child: Row(
                   children: [
                     Expanded(
