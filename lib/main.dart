@@ -1,10 +1,14 @@
 import 'package:appointment/screens/appointments_screen.dart';
 import 'package:appointment/screens/book_appointment.dart';
 import 'package:appointment/screens/home_screen.dart';
+import 'package:appointment/models/appointments_data.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
-void main() async{
+import 'models/appointments_data.dart'; // Import provider package
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: FirebaseOptions(
@@ -24,19 +28,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+    return ChangeNotifierProvider(
+      create: (context) => AppointmentData(), // Initialize your provider here
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
         home: HomeScreen(),
         initialRoute: 'home_screen',
         routes: {
           'book_appointment': (context) => BookAppointment(),
           'appointments_screen': (context) => AppointmentsScreen(),
           'home_screen': (context) => HomeScreen(),
-        }
+        },
+      ),
     );
   }
 }

@@ -5,28 +5,47 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'appointments.dart';
 
 class AppointmentData extends ChangeNotifier {
-  List<Appointment> appointments = [];
+  final _fireStore = FirebaseFirestore.instance;
 
+  List<Appointment> _appointments = [];
+
+  List<Appointment> get appointments => _appointments;
   AppointmentData() {
-    // loadAppointments();
+    loadAppointments();
   }
+
+  // Provider.of<AppointmentData>(context, listen: false).addTask(newTask);
 
   int getCount() {
     return appointments.length;
   }
 
-  void addAppointment(Appointment newAppointment) async {
-    appointments.add(newAppointment);
-    await FirebaseFirestore.instance.collection('appointments').add({
-      'name': newAppointment.name,
-      'service': newAppointment.service,
-      'time': newAppointment.time,
-      'id': newAppointment.id,
-    });
-    // saveAppointments();
+
+
+  Future<void> loadAppointments() async {
+    var snapshot = await _fireStore.collection('appointments').get();
+    _appointments = snapshot.docs.map((doc) {
+      return Appointment(
+        id: doc.id,
+        name: doc['name'],
+        service: doc['service'],
+        time: (doc['time'] as Timestamp).toDate(),
+      );
+    }).toList();
     notifyListeners();
   }
 
+  Future<void> addAppointment(Appointment appointment) async {
+    var docRef = await _fireStore.collection('appointments').add({
+      'name': appointment.name,
+      'service': appointment.service,
+      'time': appointment.time,
+    });
+
+    appointment.id = docRef.id;
+    _appointments.add(appointment);
+    notifyListeners();
+  }
   void updateAppointment(String id, Appointment updatedAppointment) async {
     int index = appointments.indexWhere((appointment) => appointment.id == id);
     if (index != -1) {

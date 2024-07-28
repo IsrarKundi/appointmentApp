@@ -1,40 +1,29 @@
 import 'dart:ui';
 import 'package:appointment/components/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:appointment/models/appointments.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../models/appointments_data.dart';
 
-final _fireStore = FirebaseFirestore.instance;
+class BookAppointment extends StatelessWidget {
+  BookAppointment({super.key});
 
-
-class BookAppointment extends StatefulWidget {
-  const BookAppointment({super.key});
-
-  @override
-  _BookAppointmentState createState() => _BookAppointmentState();
-}
-
-class _BookAppointmentState extends State<BookAppointment> {
-  DateTime? _selectedDateTime;
-  String? _selectedService;
-  String? _customerName;
-  final myController = TextEditingController();
-
-
+  final TextEditingController myController = TextEditingController();
   final List<String> _services = ['Haircut', 'Manicure', 'Massage', 'Pedicure'];
 
   @override
   Widget build(BuildContext context) {
+    DateTime? _selectedDateTime;
+    String? _selectedService;
+    String? _customerName;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Book Appointment',
-          style: TextStyle(
-              fontSize: 24
-          ),
+          style: TextStyle(fontSize: 24),
         ),
         backgroundColor: Colors.orange,
       ),
@@ -44,41 +33,39 @@ class _BookAppointmentState extends State<BookAppointment> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 35,),
-
+              SizedBox(height: 35),
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.white
-                ),
+                decoration: BoxDecoration(color: Colors.white),
                 height: 55,
                 child: TextField(
                   controller: myController,
-                    decoration: InputDecoration(
-                        hintText: 'Name',
-                        hintStyle: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black87,
-                            fontSize: 16
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 2,
-                              color: Colors.orange
-                            )
-                        ),
-                        prefixIcon: Icon(Icons.person),
-                        border: OutlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.black54))
-                    )
+                  decoration: InputDecoration(
+                    hintText: 'Name',
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black87,
+                      fontSize: 16,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 2, color: Colors.orange),
+                    ),
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(width: 2, color: Colors.black54),
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(height: 25,),
-              // FormFields('Select Service',Icons.arrow_drop_down),
+              SizedBox(height: 25),
               SizedBox(
                 height: 62,
                 child: Card(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.black.withOpacity(1), width: 0.6),
+                    side: BorderSide(
+                      color: Colors.black.withOpacity(1),
+                      width: 0.6,
+                    ),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   color: Colors.white,
@@ -87,68 +74,86 @@ class _BookAppointmentState extends State<BookAppointment> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Select Service', style: TextStyle(
+                        const Text(
+                          'Select Service',
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black87
-                        ),),
-                        DropdownButton<String>(
-                          value: _selectedService,
-                          items: _services.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(item, style: TextStyle(
-                                color: Colors.orange
-                              ),),
+                            color: Colors.black87,
+                          ),
+                        ),
+                        StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return DropdownButton<String>(
+                              value: _selectedService,
+                              items: _services.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(color: Colors.orange),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _selectedService = newValue;
+                                });
+                              },
+                              underline: Container(),
                             );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedService = newValue;
-                            });
                           },
-                          underline: Container(),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 25,),
+              SizedBox(height: 25),
               Row(
                 children: [
-                  Text('Date:  ', style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18
-                  ),),
                   Text(
-                    _selectedDateTime != null
-                        ? DateFormat('dd/MM/yyyy').format(_selectedDateTime!)
-                        : 'Not selected',
+                    'Date:  ',
                     style: TextStyle(
-                        fontSize: 18
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
-                  )
+                  ),
+                  StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return Text(
+                        _selectedDateTime != null
+                            ? DateFormat('dd/MM/yyyy').format(_selectedDateTime!)
+                            : 'Not selected',
+                        style: TextStyle(fontSize: 18),
+                      );
+                    },
+                  ),
                 ],
               ),
-              SizedBox(height: 25,),
+              SizedBox(height: 25),
               Row(
                 children: [
-                  Text('Time:  ', style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18
-                  ),),
                   Text(
-                    _selectedDateTime != null
-                        ? DateFormat('HH:mm').format(_selectedDateTime!)
-                        : 'Not selected',
+                    'Time:  ',
                     style: TextStyle(
-                        fontSize: 18
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
-                  )
+                  ),
+                  StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return Text(
+                        _selectedDateTime != null
+                            ? DateFormat('HH:mm').format(_selectedDateTime!)
+                            : 'Not selected',
+                        style: TextStyle(fontSize: 18),
+                      );
+                    },
+                  ),
                 ],
               ),
-              SizedBox(height: 25,),
+              SizedBox(height: 25),
               Align(
                 alignment: Alignment.centerLeft,
                 child: UnderlinedTextButton(
@@ -158,49 +163,54 @@ class _BookAppointmentState extends State<BookAppointment> {
                       context: context,
                     );
                     if (dateTime != null) {
-                      setState(() {
-                        _selectedDateTime = dateTime;
-                      });
+                      _selectedDateTime = dateTime;
                     }
                   },
                 ),
               ),
-              SizedBox(height: 50,),
+              SizedBox(height: 50),
               Container(
-                  width: 400,
-                  height: 60,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          if(myController != null){
-                            _customerName = myController.text;
-                          }
-                        });
-                        print(_customerName);
-                        print(_selectedService);
-                        print(_selectedDateTime);
-                        // Add booking logic here
+                width: 400,
+                height: 60,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+                  ),
+                  onPressed: () {
+                    if (myController.text.isNotEmpty) {
+                      _customerName = myController.text;
+                    }
 
-                        myController.clear();
-                        _fireStore.collection('appointments').add({
-                          'name': _customerName,
-                          'service': _selectedService,
-                          'time': _selectedDateTime,
-                        });
+                    myController.clear();
+
+                    if (_customerName != null &&
+                        _selectedService != null &&
+                        _selectedDateTime != null) {
+                      var newAppointment = Appointment(
+                        name: _customerName!,
+                        service: _selectedService!,
+                        time: _selectedDateTime!,
+                        id: '',
+                      );
+
+                      Provider.of<AppointmentData>(context, listen: false)
+                          .addAppointment(newAppointment)
+                          .then((_) {
                         Navigator.pushNamed(context, 'home_screen');
-                      },
-                      child: Text(
-                        'Book',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      )
-                  )
-              )
+                      });
+                    } else {
+                      // Show error message or handle missing data
+                    }
+                  },
+                  child: Text(
+                    'Book',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
